@@ -47,6 +47,13 @@ def create_app(test_config=None):
         res = inference_image(image)
         return res[0]
 
+    @app.route('/loginpage')
+    def loginpage():
+        return render_template('auth/login.html')
+    @app.route('/registerpage')
+    def registerpage():
+        return render_template('auth/register.html')
+
     @app.route('/login', methods=['POST'])
     def login():
         if request.method == 'POST':
