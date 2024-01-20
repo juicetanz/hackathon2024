@@ -39,7 +39,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from .db import open_db, create_user, check_user_pass, create_crop, set_current_user, get_crops, logged_in
+    from .db import open_db, create_user, check_user_pass, create_crop, delete_crop, set_current_user, get_crops, logged_in
     open_db("data.json")
 
     @app.route('/')
@@ -55,6 +55,13 @@ def create_app(test_config=None):
         val = flask.request.form['val']
         if create_crop(name, image, val) == -1: return "False"
         return "True"
+
+    @app.route('/deletecrop', methods=['POST'])
+    def deletecrop():
+        name = flask.request.form['cropname']
+        print(name)
+        delete_crop(name)
+        return ""
 
     @app.route('/imagenet', methods=['POST'])
     def imagenet():

@@ -90,6 +90,13 @@ def create_crop(crop_name, crop_img, crop_eval):
 
     return True
 
+def delete_crop(name):
+    global db
+
+    del db['users'][currentuser]['crops'][name]
+
+    _save_json()
+
 def _save_json():
     global db
 

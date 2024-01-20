@@ -85,9 +85,27 @@
                     <h5 class="card-title">`+text+`</h5>
                     <img src="`+imgURL+`" class="card-img"></img>
                     <p>Identified as `+(val.replace("_",": ")).split('_').join(' ')+`</p>
+                    <button class="btn btn-danger" onclick="deleteCard(this)">Delete</button>
                   </div>
                 </div>
               `).appendTo(jQuery("div#grid"));
+      }
+      function deleteCard(btn) {
+        const card = btn.parentElement.parentElement;
+        console.log(card);
+        
+        const formdata2 = new FormData();
+        formdata2.append("cropname",card.querySelector('h5').innerText);
+        jQuery.ajax({
+          url: "/deletecrop",
+          type: "POST",
+          data: formdata2,
+          processData: false,
+          contentType: false,
+          success:function(val){
+            card.remove();
+          }
+        });
       }
       function addCrop() {
         const formdata = new FormData();
