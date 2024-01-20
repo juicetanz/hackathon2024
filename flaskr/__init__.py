@@ -37,11 +37,13 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from .db import open_db, create_user, check_user_pass, create_crop, set_current_user, get_crops
+    from .db import open_db, create_user, check_user_pass, create_crop, set_current_user, get_crops, logged_in
     open_db("data.json")
 
     @app.route('/')
     def index():
+        if not logged_in():
+            return redirect('/login')
         return render_template('index.html')
 
     @app.route('/newcrop', methods=['POST'])

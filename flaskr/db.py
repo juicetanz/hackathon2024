@@ -29,6 +29,9 @@ def create_user(username, password):
 
     _save_json()
 
+def logged_in():
+    return currentuser == ""
+
 def set_current_user(name):
     global currentuser
     currentuser = name
