@@ -17,6 +17,12 @@ def open_db(p):
         db_code = f.read()
         db = json.loads(db_code)
 
+def name_in_db(name):
+    global db
+    if name in db['users'].keys():
+        return True
+    return False
+
 def create_user(username, password):
     global db
 

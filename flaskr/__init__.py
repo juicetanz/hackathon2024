@@ -53,8 +53,8 @@ def create_app(test_config=None):
         image = flask.request.files.get('image')
         name = flask.request.form['name']
         val = flask.request.form['val']
-        if create_crop(name, image, val) == -1: return False
-        return True
+        if create_crop(name, image, val) == -1: return "False"
+        return "True"
 
     @app.route('/imagenet', methods=['POST'])
     def imagenet():
@@ -102,14 +102,13 @@ def create_app(test_config=None):
 
             passed = check_user_pass(username, password)
 
-            if passed:
+            if passed != -1:
                 # Create session data, we can access this data in other routes
                 set_current_user(username)
                 # Redirect to home page
                 return redirect('/')
             else:
                 # Account doesnt exist or username/password incorrect
-                print("STUID NOT IN")
                 return redirect('/login')
         return render_template('auth/login.html')
     

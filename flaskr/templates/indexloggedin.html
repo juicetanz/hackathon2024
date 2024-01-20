@@ -117,7 +117,7 @@
                 processData: false,
                 contentType: false,
                 success: function (v) {
-                  if (v) {addCard(text.value, imgURL, val);}
+                  if (v === "True") {addCard(text.value, imgURL, val);}
                 }
               });
             }
