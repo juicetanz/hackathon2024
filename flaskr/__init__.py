@@ -53,8 +53,8 @@ def create_app(test_config=None):
         image = flask.request.files.get('image')
         name = flask.request.form['name']
         val = flask.request.form['val']
-        create_crop(name, image, val)
-        return ""
+        if create_crop(name, image, val) == -1: return False
+        return True
 
     @app.route('/imagenet', methods=['POST'])
     def imagenet():
@@ -74,8 +74,8 @@ def create_app(test_config=None):
             ph = request.form['ph']
             rain = request.form['rain']
             return run_suggestion(n,p,k,temp,humid,ph,rain)
-
-        return render_template('cropprediction/prediction.html')
+        if logged_in(): return render_template('cropprediction/predictionloggedin.html')
+        return render_template('cropprediction/predictionloggedout.html')
 
     @app.route('/register', methods=['GET','POST'])
     def register():
@@ -112,13 +112,6 @@ def create_app(test_config=None):
                 print("STUID NOT IN")
                 return redirect('/login')
         return render_template('auth/login.html')
-    
-    '''
-            <form method="post">
-                <p><input type=text name=username>
-                <p><input type=submit value=Login>
-            </form>
-    '''
     
     @app.route('/logout')
     def logout():
