@@ -125,20 +125,18 @@
           });
         }
       }
-      $('#addmodal').on('hidden.bs.modal', function () {
-        $('#name').prop("value", "");
-        $('#image-to-upload').prop("value", "");
-      })
       function search() {
-        var txt = $('#search').val();
-        $('.grid-container').each(function(){
-          console.log(txt + ' ' + $(this).find('h5').text()[0])
-          if(this.id == "add" || $(this).find('h5').text()[0].find(txt)){
-            $(this).show();
-          } else {
-            $(this).hide();
-          }
-        });
+        const searchQuery = document.getElementById("search").value;
+        const labels = document.querySelectorAll("h5.card-title");
+        labels.forEach(label => {
+          if (label.innerHTML.includes(searchQuery)) {
+            label.parentElement.parentElement.style.display = "block";
+          } else {label.parentElement.parentElement.style.display = "none";}
+        })
+      }
+      function searchClear() {
+        document.getElementById("search").value = "";
+        search();
       }
     </script>
   </body>
