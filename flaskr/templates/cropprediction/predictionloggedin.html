@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" href="static/global.css">
+        <link rel="stylesheet" href="static/prediction.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        {% include 'navloggedin.html' %}
+        <div class="jumbotron jumbotron-fluid jumbotron-dark bg-dark">
+            <div class="container container-dark bg-dark">
+                <div class="form-group">
+                    <label for="n">Fertilizer nitrogen content</label>
+                    <input type="number" class="form-control" id="n">
+                </div>
+                <div class="form-group">
+                    <label for="p">Fertilizer phosphorus content</label>
+                    <input type="text" class="form-control" id="p">
+                </div>
+                <div class="form-group">
+                    <label for="k">Fertilizer potassium content</label>
+                    <input type="text" class="form-control" id="k">
+                </div>
+                <div class="form-group">
+                    <label for="temp">Temperature</label>
+                    <input type="text" class="form-control" id="temp">
+                </div>
+                <div class="form-group">
+                    <label for="humid">Humidity</label>
+                    <input type="text" class="form-control" id="humid">
+                </div>
+                <div class="form-group">
+                    <label for="ph">pH</label>
+                    <input type="text" class="form-control" id="ph">
+                </div>
+                <div class="form-group">
+                    <label for="rain">Rainfall</label>
+                    <input type="text" class="form-control" id="rain">
+                </div>
+                <button type="submit" class="btn btn-primary" id="run-btn">Run</button>
+            </div>
+            <br>
+            <div class="container container-danger bg-primary rounded" id="primary"></div>
+            <div class="container container-danger bg-danger rounded" id="warning"></div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script>
+            const n = document.getElementById('n');
+            const p = document.getElementById('p');
+            const k = document.getElementById('k');
+            const temp = document.getElementById('temp');
+            const humid = document.getElementById('humid');
+            const ph = document.getElementById('ph');
+            const rain = document.getElementById('rain');
+            jQuery("#run-btn").click(function() {
+                jQuery.ajax({
+                    url: '/prediction',
+                    method: 'POST',
+                    data: {
+                        n: n.value,
+                        p: p.value,
+                        k: k.value,
+                        temp: temp.value,
+                        humid: humid.value,
+                        ph: ph.value,
+                        rain: rain.value
+                    },
+                    success: function(response) {
+                        let res = "";
+                        Object.keys(response).forEach(key => {
+                            const perc = response[key] * 100;
+
+                            res += "You should " + perc + "% use the " + key + " crop.\n";
+                        });
+                        jQuery("#primary").html(res);
+                        jQuery("#warning").html("");
+                    },
+                    error: function(xhr, status, error) {
+                        jQuery("#primary").html("");
+                        jQuery("#warning").html("There was an error!");
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
