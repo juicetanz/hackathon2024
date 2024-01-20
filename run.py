@@ -12,7 +12,7 @@ def load_model():
     return model
 
 MODEL_PATH = "original_model_best.pth.tar"
-SAVED_PTH = torch.load(MODEL_PATH)
+SAVED_PTH = torch.load(MODEL_PATH, map_location=torch.device('cpu'))
 MODEL = load_model()
 
 def create_image_tensor(pil_img, resolution):

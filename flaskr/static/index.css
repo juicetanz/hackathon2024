@@ -45,3 +45,13 @@ img {
 .nav-search {
   margin-right: 20px;
 }
+
+.modal-content {
+  background-color: rgb(24, 24, 24) !important;
+  color: white;
+}
+
+.card {
+  background-color: rgb(24, 24, 24) !important;
+  color: white;
+}
