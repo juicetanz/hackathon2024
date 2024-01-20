@@ -46,6 +46,10 @@ def create_app(test_config=None):
         image = Image.open(image)
         res = inference_image(image)
         return res[0]
+    
+    @app.route('/prediction')
+    def prediction():
+        return render_template('cropprediction/prediction.html')
 
     @app.route('/loginpage')
     def loginpage():
