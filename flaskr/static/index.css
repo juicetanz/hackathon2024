@@ -38,8 +38,13 @@ img {
   margin-left: auto;
 }
 
-.navbar {
-  background-color: rgb(24, 24, 24) !important;
+#floating-add {
+  text-align: center !important;
+  vertical-align: center !important;
+  height: 60px !important;
+  width: 60px !important;
+  margin-bottom: 5% !important;
+  margin-right: 5% !important;
 }
 
 .nav-search {
@@ -56,7 +61,15 @@ img {
   color: white;
 }
 
-.jumbotron {
+.jumbotron-dark {
   background-color: rgb(24, 24, 24) !important;
   color: white;
+  padding: 20px !important;
+}
+
+#floating-add {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  font-size: 20px !important;
 }

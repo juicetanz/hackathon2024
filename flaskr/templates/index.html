@@ -4,14 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harvest Helper</title>
+    <link rel="stylesheet" href="static/global.css">
     <link rel="stylesheet" href="static/index.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
     {% include 'nav.html' %}
-    <main>
-      <div id="grid" class="grid-container"></div>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addmodal">New</button>
+    <main class="jumbotron-dark bg-dark">
+      <div id="grid" class="grid-container">
+        <div class="card" data-bs-theme="dark" style="width: 18rem;" id="add">
+          <img class="card-img-top" src="">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Add new</h5>
+            <button data-toggle="modal" data-target="#addmodal" class="btn btn-primary btn-lg btn-block mb-auto" id="card-add">+</button>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-lg btn-primary rounded-circle" data-toggle="modal" data-target="#addmodal" id="floating-add">+</button>
       <!--Add crop modal-->
       <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-labelledby="title" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -105,6 +114,19 @@
                 processData: false,
                 contentType: false,
               });
+              /*
+            success:function(data){
+              jQuery(`
+                <div class="card" data-bs-theme="dark" style="width: 18rem;">
+                  <img class="card-img-top" src="">
+                  <div class="card-body">
+                    <h5 class="card-title">`+text.value+`</h5>
+                    <img src="`+imgURL+`" class="card-img"></img>
+                    <p>Identified as: `+data+`</p>
+                    <a data-toggle="modal" class="btn btn-primary">Edit</a>
+                  </div>
+                </div>
+              `).prependTo(jQuery("div#grid"));*/
             }
           });
         }
@@ -113,6 +135,17 @@
         $('#name').prop("value", "");
         $('#image-to-upload').prop("value", "");
       })
+      function search() {
+        var txt = $('#search').val();
+        $('.grid-container').each(function(){
+          console.log(txt + ' ' + $(this).find('h5').text()[0])
+          if(this.id == "add" || $(this).find('h5').text()[0].find(txt)){
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      }
     </script>
   </body>
 </html>

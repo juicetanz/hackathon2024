@@ -14,6 +14,7 @@ from PIL import Image
 
 from run import inference_image
 from . import db
+from flaskr.templates.cropprediction.run import run_suggestion
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -58,8 +59,18 @@ def create_app(test_config=None):
         res = inference_image(image)
         return res[0]
     
-    @app.route('/prediction')
+    @app.route('/prediction', methods=['GET','POST'])
     def prediction():
+        if request.method == 'POST':
+            n = request.form['n']
+            p = request.form['p']
+            k = request.form['k']
+            temp = request.form['temp']
+            humid = request.form['humid']
+            ph = request.form['ph']
+            rain = request.form['rain']
+            return run_suggestion(n,p,k,temp,humid,ph,rain)
+
         return render_template('cropprediction/prediction.html')
 
     @app.route('/register', methods=['GET','POST'])

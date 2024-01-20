@@ -6,7 +6,7 @@ from sklearn import metrics
 import warnings
 warnings.filterwarnings('ignore')
 
-crops = pd.read_csv('Crop_recommendation.csv')
+crops = pd.read_csv('flaskr/templates/cropprediction/Crop_recommendation.csv')
 
 crops['label'].unique()
 
@@ -38,7 +38,7 @@ knn_test_accuracy = knn.score(x_test,y_test)
 print("knn_test_accuracy = ",knn.score(x_test,y_test)*100, "%")
 
 
-def run(N, P, K, temperature, humidity, ph, rainfall):
+def run_suggestion(N, P, K, temperature, humidity, ph, rainfall):
     x_values = np.array([[N, P, K, temperature, humidity, ph, rainfall]])
     x_data = pd.DataFrame(x_values, columns = ['N','P','K','temperature','humidity','ph','rainfall'])
     ans = knn.predict_proba(x_data)
@@ -49,8 +49,6 @@ def run(N, P, K, temperature, humidity, ph, rainfall):
         if d > 0:
             t[knn.classes_[idx]] = d
     return t
-
-print(run(3,77,25,24.84906168,22.89464642,5.608165195,62.21292186))
 
 '''
 import re
