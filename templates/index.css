@@ -1,5 +1,5 @@
 body {
-  background-color: #282828;
+  background-color: #232323 !important;
 }
 
 .grid-container {
@@ -36,4 +36,12 @@ img {
 
 .value {
   margin-left: auto;
+}
+
+.navbar {
+  background-color: rgb(24, 24, 24) !important;
+}
+
+.nav-search {
+  margin-right: 20px;
 }
