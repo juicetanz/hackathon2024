@@ -2,6 +2,8 @@ import json
 import os
 from PIL import Image
 
+from flask import session
+
 import base64
 
 db = ""
@@ -29,8 +31,11 @@ def create_user(username, password):
 
     _save_json()
 
+def get_logged_in_name():
+    return currentuser
+
 def logged_in():
-    return currentuser == ""
+    return currentuser == "" or currentuser != None
 
 def set_current_user(name):
     global currentuser

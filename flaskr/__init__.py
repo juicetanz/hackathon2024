@@ -16,6 +16,8 @@ from run import inference_image
 from . import db
 from flaskr.templates.cropprediction.run import run_suggestion
 
+from flask import session
+
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.secret_key = Flask.secret_key
@@ -42,9 +44,9 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
-        if not logged_in():
-            return redirect('/login')
-        return render_template('index.html')
+        if logged_in():
+            return render_template('indexloggedin.html')
+        return render_template('indexloggedout.html')
 
     @app.route('/newcrop', methods=['POST'])
     def newcrop():
@@ -121,8 +123,8 @@ def create_app(test_config=None):
     @app.route('/logout')
     def logout():
         # remove the username from the session if it's there
-        set_current_user("")
-        return redirect(url_for('index'))
+        set_current_user(None)
+        return redirect("/")
 
     if __name__ == '__main__':
         app.run()
