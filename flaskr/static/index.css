@@ -82,3 +82,12 @@ img {
   width: 400px;
   margin-bottom: 20px;
 }
+
+#username, #password {
+  width: 60%;
+}
+
+.form-group, #loginsubmit, #registersubmit {
+  margin-left: 25%;
+}
+
