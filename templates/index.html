@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keep Yourself Safe</title>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+  </head>
+  <body>
+    <main>
+        <div id="grid" class="grid-container">
+
+        </div>
+        <input type="file" id="image_to_upload"/>
+        <input type="text" id="name"/>
+        <button onclick="addCrop()">Add Crop</button>
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function addCrop() {
+          jQuery.noConflict();
+          formdata = new FormData();
+          const file = document.getElementById("image_to_upload")
+          console.log(file.files)
+          if (formdata) {
+            formdata.append("image", file.files[0]);
+            jQuery.ajax({
+              url: "/imagenet",
+              type: "POST",
+              data: formdata,
+              processData: false,
+              contentType: false,
+              success:function(ai){
+                console.log(ai)
+              }
+            });
+          }
+          const newCard = document.createElement("div");
+          const existingDiv = document.getElementById("grid");
+          existingDiv.appendChild(newCard);
+        }
+    </script>
+  </body>
+</html>
