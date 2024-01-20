@@ -73,3 +73,8 @@ img {
   bottom: 20px;
   font-size: 20px !important;
 }
+
+#searchbox {
+  width: 400px;
+  margin-bottom: 20px;
+}

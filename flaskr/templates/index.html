@@ -11,6 +11,11 @@
   <body>
     {% include 'nav.html' %}
     <main class="jumbotron-dark bg-dark">
+      <div id="searchbox">
+        <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" id="search">
+        <button class="btn btn-outline-success my-2 my-sm-0" onclick="search()">Search</button>
+        <button class="btn btn-outline-danger my-2 my-sm-0" onclick="searchClear()">Clear</button>
+      </div>
       <div id="grid" class="grid-container">
         <div class="card" data-bs-theme="dark" style="width: 18rem;" id="add">
           <img class="card-img-top" src="">
@@ -114,19 +119,6 @@
                 processData: false,
                 contentType: false,
               });
-              /*
-            success:function(data){
-              jQuery(`
-                <div class="card" data-bs-theme="dark" style="width: 18rem;">
-                  <img class="card-img-top" src="">
-                  <div class="card-body">
-                    <h5 class="card-title">`+text.value+`</h5>
-                    <img src="`+imgURL+`" class="card-img"></img>
-                    <p>Identified as: `+data+`</p>
-                    <a data-toggle="modal" class="btn btn-primary">Edit</a>
-                  </div>
-                </div>
-              `).prependTo(jQuery("div#grid"));*/
             }
           });
         }
@@ -136,15 +128,17 @@
         $('#image-to-upload').prop("value", "");
       })
       function search() {
-        var txt = $('#search').val();
-        $('.grid-container').each(function(){
-          console.log(txt + ' ' + $(this).find('h5').text()[0])
-          if(this.id == "add" || $(this).find('h5').text()[0].find(txt)){
-            $(this).show();
-          } else {
-            $(this).hide();
-          }
-        });
+        const searchQuery = document.getElementById("search").value;
+        const labels = document.querySelectorAll("h5.card-title");
+        labels.forEach(label => {
+          if (label.innerHTML.includes(searchQuery)) {
+            label.parentElement.parentElement.style.display = "block";
+          } else {label.parentElement.parentElement.style.display = "none";}
+        })
+      }
+      function searchClear() {
+        document.getElementById("search").value = "";
+        search();
       }
     </script>
   </body>
