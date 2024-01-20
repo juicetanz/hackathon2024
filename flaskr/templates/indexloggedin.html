@@ -86,8 +86,7 @@
                   <div class="card-body">
                     <h5 class="card-title">`+text+`</h5>
                     <img src="`+imgURL+`" class="card-img"></img>
-                    <p>Identified as: `+val+`</p>
-                    <a data-toggle="modal" class="btn btn-primary">Edit</a>
+                    <p>Identified as `+(val.replace("_",": ")).split('_').join(' ')+`</p>
                   </div>
                 </div>
               `).appendTo(jQuery("div#grid"));
