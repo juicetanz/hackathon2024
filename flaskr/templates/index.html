@@ -46,10 +46,39 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script type="text/javascript">
+      jQuery.ajax({
+        url: "/loadcrops",
+        type: "GET",
+        success:function(res){
+          Object.keys(res).forEach(idx => {
+            const cropData = res[idx];
+            const cropName = cropData['name'];
+            let cropImg = new Image();
+            cropImg.url = cropData['image_str'];
+            const urlCreator = window.URL;
+            const imgURL = cropName;
+            const val = cropData['val'];
+            addCard(cropName, "data:image/png;base64," + cropData['image_str'], val);
+          });
+        }
+      });
+      function addCard(text, imgURL, val) {
+        jQuery(`
+                <div class="card" data-bs-theme="dark" style="width: 18rem;">
+                  <img class="card-img-top" src="">
+                  <div class="card-body">
+                    <h5 class="card-title">`+text+`</h5>
+                    <img src="`+imgURL+`" class="card-img"></img>
+                    <p>Identified as: `+val+`</p>
+                    <a data-toggle="modal" class="btn btn-primary">Edit</a>
+                  </div>
+                </div>
+              `).appendTo(jQuery("div#grid"));
+      }
       function addCrop() {
-        formdata = new FormData();
-        const file = document.getElementById("image-to-upload")
-        const text = document.getElementById("name")
+        const formdata = new FormData();
+        const file = document.getElementById("image-to-upload");
+        const text = document.getElementById("name");
         if (formdata) {
           formdata.append("image", file.files[0]);
           const urlCreator = window.URL;
@@ -60,18 +89,22 @@
             data: formdata,
             processData: false,
             contentType: false,
-            success:function(data){
-              jQuery(`
-                <div class="card" data-bs-theme="dark" style="width: 18rem;">
-                  <img class="card-img-top" src="">
-                  <div class="card-body">
-                    <h5 class="card-title">`+text.value+`</h5>
-                    <img src="`+imgURL+`" class="card-img"></img>
-                    <p>Identified as: `+data+`</p>
-                    <a data-toggle="modal" class="btn btn-primary">Edit</a>
-                  </div>
-                </div>
-              `).appendTo(jQuery("div#grid"));
+            success:function(val){
+              addCard(text.value, imgURL, val);
+
+              const formdata2 = new FormData();
+              const file2 = document.getElementById("image-to-upload");
+              const text2 = document.getElementById("name");
+              formdata2.append("image", file2.files[0]);
+              formdata2.append("name", text2.value);
+              formdata2.append("val", val);
+              jQuery.ajax({
+                url: "/newcrop",
+                type: "POST",
+                data: formdata2,
+                processData: false,
+                contentType: false,
+              });
             }
           });
         }

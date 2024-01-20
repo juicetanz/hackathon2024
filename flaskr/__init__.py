@@ -36,12 +36,20 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    from . import db
-    db.init_app(app)
+    from .db import open_db, create_user, check_user_pass, create_crop, set_current_user, get_crops
+    open_db("data.json")
 
     @app.route('/')
     def index():
         return render_template('index.html')
+
+    @app.route('/newcrop', methods=['POST'])
+    def newcrop():
+        image = flask.request.files.get('image')
+        name = flask.request.form['name']
+        val = flask.request.form['val']
+        create_crop(name, image, val)
+        return ""
 
     @app.route('/imagenet', methods=['POST'])
     def imagenet():
@@ -61,12 +69,14 @@ def create_app(test_config=None):
             username = request.form['username']
             password = request.form['password']
             
-            connection = sqlite3.connect('./instance/flaskr.db')
-            print(connection)
-            connection.cursor().execute('INSERT INTO user (username,password) VALUES (?,?)', (username, password))
-            connection.close()
+            create_user(username, password)
+            set_current_user(username)
             return redirect('/')
         return render_template('auth/register.html')
+    
+    @app.route('/loadcrops', methods=['GET'])
+    def loadcrops():
+        return get_crops()
 
     @app.route('/login', methods=['GET','POST'])
     def login():
@@ -74,17 +84,12 @@ def create_app(test_config=None):
             # Create variables for easy access
             username = request.form['username']
             password = request.form['password']
-            print(username,password)
-            # Check if account exists using MySQL
-            connection = sqlite3.connect('./instance/flaskr.db')
-            connection.cursor().execute('SELECT * FROM user WHERE username = ? AND password = ?', (username, password))
-            # Fetch one record and return the result
-            account = connection.cursor().fetchone()
-            print(account)
-            connection.close()
-            if account:
+
+            passed = check_user_pass(username, password)
+
+            if passed:
                 # Create session data, we can access this data in other routes
-                session['username'] = request.form['username']
+                set_current_user(username)
                 # Redirect to home page
                 return redirect('/')
             else:
@@ -103,7 +108,7 @@ def create_app(test_config=None):
     @app.route('/logout')
     def logout():
         # remove the username from the session if it's there
-        session.pop('username', None)
+        set_current_user("")
         return redirect(url_for('index'))
 
     if __name__ == '__main__':
